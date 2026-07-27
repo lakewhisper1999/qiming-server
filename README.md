@@ -98,7 +98,7 @@ src/main/resources/
 
 ## 📄 许可证
 
-本项目基于 [MIT 许可证](LICENSE) 开源。© 2026 Kevin (lakewhisper1999)。
+本项目基于 [MIT 许可证](LICENSE) 开源。© 2026 lakewhisper1999。
 
 ## 🔗 相关仓库
 
