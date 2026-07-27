@@ -1,0 +1,30 @@
+# ========== 构建产物 ==========
+target/
+**/target/
+*.class
+
+# ========== IDE ==========
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# ========== 上传的媒体文件（重点！） ==========
+# qiming-server/uploads 含约 1.9G 的视频/图片，严禁入库
+# 学习者在本地运行后可自行上传，或用 init.sql 建表
+uploads/
+**/uploads/
+
+# ========== 日志 ==========
+*.log
+logs/
+
+# ========== 本地环境配置（按需） ==========
+# 若你创建了包含真实密钥的本地配置，请取消下行注释
+# src/main/resources/application-local.yml
+
+# ========== 系统 ==========
+.DS_Store
+Thumbs.db
