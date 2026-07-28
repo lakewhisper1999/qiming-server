@@ -17,5 +17,6 @@ public class ArtworkDTO {
     private String imageUrls;
     private Long categoryId;
     private String downloadUrl;
+    private String videoUrl;
     private Long fileSize;
 }
