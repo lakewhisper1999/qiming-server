@@ -53,6 +53,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         artwork.setImageUrls(dto.getImageUrls());
         artwork.setCategoryId(dto.getCategoryId());
         artwork.setDownloadUrl(dto.getDownloadUrl());
+        artwork.setVideoUrl(dto.getVideoUrl());
         artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : 0L);
         artwork.setViewCount(0);
         artwork.setDownloadCount(0);
@@ -71,6 +72,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         artwork.setImageUrls(dto.getImageUrls());
         artwork.setCategoryId(dto.getCategoryId());
         artwork.setDownloadUrl(dto.getDownloadUrl());
+        artwork.setVideoUrl(dto.getVideoUrl());
         artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : artwork.getFileSize());
         artworkMapper.updateById(artwork);
         return artwork;

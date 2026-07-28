@@ -17,7 +17,7 @@ public interface ArtworkMapper extends BaseMapper<Artwork> {
     void incrementView(@Param("id") Long id);
 
     /** 全量分页（含分类名，不筛选分类） */
-    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, " +
+    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +
             "a.file_size, a.view_count, a.download_count, a.user_id, a.created_at, a.updated_at, a.deleted, " +
             "c.name AS category_name " +
             "FROM artwork a LEFT JOIN category c ON a.category_id = c.id " +
@@ -25,7 +25,7 @@ public interface ArtworkMapper extends BaseMapper<Artwork> {
     IPage<Artwork> selectPageAll(Page<Artwork> page);
 
     /** 按分类分页（含分类名） */
-    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, " +
+    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +
             "a.file_size, a.view_count, a.download_count, a.user_id, a.created_at, a.updated_at, a.deleted, " +
             "c.name AS category_name " +
             "FROM artwork a LEFT JOIN category c ON a.category_id = c.id " +
@@ -33,7 +33,7 @@ public interface ArtworkMapper extends BaseMapper<Artwork> {
     IPage<Artwork> selectPageByCategory(Page<Artwork> page, @Param("categoryId") Long categoryId);
 
     /** 管理后台：关键词+分类联合搜索分页 */
-    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, " +
+    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +
             "a.file_size, a.view_count, a.download_count, a.user_id, a.created_at, a.updated_at, a.deleted, " +
             "c.name AS category_name " +
             "FROM artwork a LEFT JOIN category c ON a.category_id = c.id " +

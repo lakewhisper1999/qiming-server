@@ -15,6 +15,7 @@ public class Artwork {
     private String imageUrls;
     private Long categoryId;
     private String downloadUrl;
+    private String videoUrl;
     private Long fileSize;
     private Integer viewCount;
     private Integer downloadCount;
