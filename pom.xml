@@ -20,7 +20,7 @@
     <properties>
         <java.version>1.8</java.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>0.13.0</jjwt.version>
     </properties>
 
     <dependencies>
