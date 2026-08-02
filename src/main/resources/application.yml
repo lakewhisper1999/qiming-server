@@ -49,3 +49,16 @@ jwt:
 upload:
   path: ./uploads/
   access-path: /uploads/**
+
+# 自动发布：后台保存数据后，自动重新导出前端静态快照(works.json + media 图片)。
+# 只做「重新生成快照」这一步；git 提交与推送由开发者手动完成（不碰 git，无需凭据/SSH）。
+# 默认关闭；本地启用方式（二选一，不要把这个改动提交到开源仓库）：
+#   1) 环境变量：QIMING_PUBLISH_ENABLED=true  QIMING_PUBLISH_ARTSPACE_PATH=../qiming-artspace
+#   2) 或把 enabled 改为 true
+# artspace-path 可用绝对路径；相对路径基于本服务启动目录(qiming-server)解析。
+# node-bin 仅在 node 不在 JVM 的 PATH 时填全路径（如 C:\xxx\node.exe）。
+qiming:
+  publish:
+    enabled: false
+    artspace-path: ../qiming-artspace
+    node-bin: node

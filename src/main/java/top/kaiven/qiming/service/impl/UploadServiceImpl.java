@@ -1,13 +1,11 @@
 package top.kaiven.qiming.service.impl;
 
-import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.kaiven.qiming.common.BizException;
 import org.springframework.web.multipart.MultipartFile;
 import top.kaiven.qiming.service.UploadService;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

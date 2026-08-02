@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import top.kaiven.qiming.entity.SiteConfig;
 import top.kaiven.qiming.mapper.SiteConfigMapper;
 import top.kaiven.qiming.service.SiteConfigService;
+import top.kaiven.qiming.common.PublishService;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class SiteConfigServiceImpl implements SiteConfigService {
 
     private final SiteConfigMapper siteConfigMapper;
+    private final PublishService publishService;
 
     @Override
     public List<SiteConfig> listAll() {
@@ -33,5 +35,6 @@ public class SiteConfigServiceImpl implements SiteConfigService {
                 siteConfigMapper.insert(config);
             }
         }
+        publishService.publishAsync();
     }
 }

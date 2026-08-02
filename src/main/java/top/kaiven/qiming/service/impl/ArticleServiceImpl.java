@@ -10,12 +10,14 @@ import top.kaiven.qiming.dto.ArticleDTO;
 import top.kaiven.qiming.entity.Article;
 import top.kaiven.qiming.mapper.ArticleMapper;
 import top.kaiven.qiming.service.ArticleService;
+import top.kaiven.qiming.common.PublishService;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleMapper articleMapper;
+    private final PublishService publishService;
 
     @Override
     public IPage<Article> pagePublic(int page, int size, Long categoryId) {
@@ -52,6 +54,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUserId(userId);
         article.setViewCount(0);
         articleMapper.insert(article);
+        publishService.publishAsync();
         return article;
     }
 
@@ -64,11 +67,13 @@ public class ArticleServiceImpl implements ArticleService {
         article.setCoverUrl(dto.getCoverUrl());
         article.setCategoryId(dto.getCategoryId());
         articleMapper.updateById(article);
+        publishService.publishAsync();
         return article;
     }
 
     @Override
     public void delete(Long id) {
         articleMapper.deleteById(id);
+        publishService.publishAsync();
     }
 }

@@ -10,12 +10,14 @@ import top.kaiven.qiming.dto.ArtworkDTO;
 import top.kaiven.qiming.entity.Artwork;
 import top.kaiven.qiming.mapper.ArtworkMapper;
 import top.kaiven.qiming.service.ArtworkService;
+import top.kaiven.qiming.common.PublishService;
 
 @Service
 @RequiredArgsConstructor
 public class ArtworkServiceImpl implements ArtworkService {
 
     private final ArtworkMapper artworkMapper;
+    private final PublishService publishService;
 
     @Override
     public IPage<Artwork> pagePublic(int page, int size, Long categoryId) {
@@ -59,6 +61,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         artwork.setDownloadCount(0);
         artwork.setUserId(userId);
         artworkMapper.insert(artwork);
+        publishService.publishAsync();
         return artwork;
     }
 
@@ -75,11 +78,13 @@ public class ArtworkServiceImpl implements ArtworkService {
         artwork.setVideoUrl(dto.getVideoUrl());
         artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : artwork.getFileSize());
         artworkMapper.updateById(artwork);
+        publishService.publishAsync();
         return artwork;
     }
 
     @Override
     public void delete(Long id) {
         artworkMapper.deleteById(id);
+        publishService.publishAsync();
     }
 }
