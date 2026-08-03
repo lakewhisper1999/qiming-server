@@ -79,9 +79,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long userId) {
         userMapper.deleteById(userId);
     }
-
-    /** 工具方法：对密码BCrypt加密 */
-    public String encodePassword(String rawPassword) {
-        return encoder.encode(rawPassword);
-    }
 }

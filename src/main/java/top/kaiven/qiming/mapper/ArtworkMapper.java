@@ -16,21 +16,15 @@ public interface ArtworkMapper extends BaseMapper<Artwork> {
     @Update("UPDATE artwork SET view_count = view_count + 1 WHERE id = #{id}")
     void incrementView(@Param("id") Long id);
 
-    /** 全量分页（含分类名，不筛选分类） */
+    /** 前台分页（含分类名，categoryId 为空则不过滤） */
     @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +
             "a.file_size, a.view_count, a.download_count, a.user_id, a.created_at, a.updated_at, a.deleted, " +
             "c.name AS category_name " +
             "FROM artwork a LEFT JOIN category c ON a.category_id = c.id " +
-            "WHERE a.deleted = 0 ORDER BY a.created_at DESC")
-    IPage<Artwork> selectPageAll(Page<Artwork> page);
-
-    /** 按分类分页（含分类名） */
-    @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +
-            "a.file_size, a.view_count, a.download_count, a.user_id, a.created_at, a.updated_at, a.deleted, " +
-            "c.name AS category_name " +
-            "FROM artwork a LEFT JOIN category c ON a.category_id = c.id " +
-            "WHERE a.deleted = 0 AND a.category_id = #{categoryId} ORDER BY a.created_at DESC")
-    IPage<Artwork> selectPageByCategory(Page<Artwork> page, @Param("categoryId") Long categoryId);
+            "WHERE a.deleted = 0 " +
+            "AND (#{categoryId} IS NULL OR a.category_id = #{categoryId}) " +
+            "ORDER BY a.created_at DESC")
+    IPage<Artwork> selectPagePublic(Page<Artwork> page, @Param("categoryId") Long categoryId);
 
     /** 管理后台：关键词+分类联合搜索分页 */
     @Select("SELECT a.id, a.title, a.description, a.cover_url, a.image_urls, a.category_id, a.download_url, a.video_url, " +

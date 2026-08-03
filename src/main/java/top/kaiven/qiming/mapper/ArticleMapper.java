@@ -16,25 +16,17 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Update("UPDATE article SET view_count = view_count + 1 WHERE id = #{id}")
     void incrementView(@Param("id") Long id);
 
-    /** 全量分页（不按分类筛选，含分类名+作者名） */
+    /** 前台分页（含分类名+作者名，categoryId 为空则不过滤） */
     @Select("SELECT a.id, a.title, LEFT(a.content, 300) AS content, a.cover_url, a.category_id, a.view_count, " +
             "a.user_id, a.created_at, a.updated_at, a.deleted, " +
             "c.name AS category_name, u.nickname AS author_name " +
             "FROM article a " +
             "LEFT JOIN category c ON a.category_id = c.id " +
             "LEFT JOIN user u ON a.user_id = u.id " +
-            "WHERE a.deleted = 0 ORDER BY a.created_at DESC")
-    IPage<Article> selectPageAll(Page<Article> page);
-
-    /** 按分类分页（含分类名+作者名） */
-    @Select("SELECT a.id, a.title, LEFT(a.content, 300) AS content, a.cover_url, a.category_id, a.view_count, " +
-            "a.user_id, a.created_at, a.updated_at, a.deleted, " +
-            "c.name AS category_name, u.nickname AS author_name " +
-            "FROM article a " +
-            "LEFT JOIN category c ON a.category_id = c.id " +
-            "LEFT JOIN user u ON a.user_id = u.id " +
-            "WHERE a.deleted = 0 AND a.category_id = #{categoryId} ORDER BY a.created_at DESC")
-    IPage<Article> selectPageByCategory(Page<Article> page, @Param("categoryId") Long categoryId);
+            "WHERE a.deleted = 0 " +
+            "AND (#{categoryId} IS NULL OR a.category_id = #{categoryId}) " +
+            "ORDER BY a.created_at DESC")
+    IPage<Article> selectPagePublic(Page<Article> page, @Param("categoryId") Long categoryId);
 
     /** 管理后台：关键词搜索分页（含分类名+作者名） */
     @Select("SELECT a.id, a.title, LEFT(a.content, 300) AS content, a.cover_url, a.category_id, a.view_count, " +

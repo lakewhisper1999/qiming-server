@@ -7,8 +7,8 @@ import top.kaiven.qiming.entity.Category;
 import top.kaiven.qiming.entity.SiteConfig;
 import top.kaiven.qiming.entity.VisitLog;
 import top.kaiven.qiming.service.CategoryService;
+import top.kaiven.qiming.mapper.VisitLogMapper;
 import top.kaiven.qiming.service.SiteConfigService;
-import top.kaiven.qiming.service.VisitLogService;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class PublicMiscController {
 
     private final CategoryService categoryService;
     private final SiteConfigService siteConfigService;
-    private final VisitLogService visitLogService;
+    private final VisitLogMapper visitLogMapper;
 
     @GetMapping("/categories")
     public Result<List<Category>> categories() {
@@ -36,7 +36,7 @@ public class PublicMiscController {
 
     @PostMapping("/visit-log")
     public Result<?> visitLog(@RequestBody VisitLog log) {
-        visitLogService.record(log);
+        visitLogMapper.insert(log);
         return Result.ok();
     }
 }

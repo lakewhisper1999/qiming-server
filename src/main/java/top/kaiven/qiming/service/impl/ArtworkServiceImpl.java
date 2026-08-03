@@ -3,6 +3,7 @@ package top.kaiven.qiming.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import top.kaiven.qiming.common.BizException;
@@ -21,11 +22,7 @@ public class ArtworkServiceImpl implements ArtworkService {
 
     @Override
     public IPage<Artwork> pagePublic(int page, int size, Long categoryId) {
-        Page<Artwork> pageObj = new Page<>(page, size);
-        if (categoryId != null) {
-            return artworkMapper.selectPageByCategory(pageObj, categoryId);
-        }
-        return artworkMapper.selectPageAll(pageObj);
+        return artworkMapper.selectPagePublic(new Page<>(page, size), categoryId);
     }
 
     @Override
@@ -49,17 +46,11 @@ public class ArtworkServiceImpl implements ArtworkService {
     @Override
     public Artwork save(ArtworkDTO dto, Long userId) {
         Artwork artwork = new Artwork();
-        artwork.setTitle(dto.getTitle());
-        artwork.setDescription(dto.getDescription());
-        artwork.setCoverUrl(dto.getCoverUrl());
-        artwork.setImageUrls(dto.getImageUrls());
-        artwork.setCategoryId(dto.getCategoryId());
-        artwork.setDownloadUrl(dto.getDownloadUrl());
-        artwork.setVideoUrl(dto.getVideoUrl());
-        artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : 0L);
+        BeanUtils.copyProperties(dto, artwork);
+        artwork.setUserId(userId);
         artwork.setViewCount(0);
         artwork.setDownloadCount(0);
-        artwork.setUserId(userId);
+        artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : 0L);
         artworkMapper.insert(artwork);
         publishService.publishAsync();
         return artwork;
@@ -69,14 +60,11 @@ public class ArtworkServiceImpl implements ArtworkService {
     public Artwork update(ArtworkDTO dto, Long userId) {
         Artwork artwork = artworkMapper.selectById(dto.getId());
         if (artwork == null) throw BizException.notFound("作品不存在");
-        artwork.setTitle(dto.getTitle());
-        artwork.setDescription(dto.getDescription());
-        artwork.setCoverUrl(dto.getCoverUrl());
-        artwork.setImageUrls(dto.getImageUrls());
-        artwork.setCategoryId(dto.getCategoryId());
-        artwork.setDownloadUrl(dto.getDownloadUrl());
-        artwork.setVideoUrl(dto.getVideoUrl());
-        artwork.setFileSize(dto.getFileSize() != null ? dto.getFileSize() : artwork.getFileSize());
+        // 复制可编辑字段；忽略 id 与 fileSize：fileSize 为空时保留原值，避免被 null 覆盖
+        BeanUtils.copyProperties(dto, artwork, "id", "fileSize");
+        if (dto.getFileSize() != null) {
+            artwork.setFileSize(dto.getFileSize());
+        }
         artworkMapper.updateById(artwork);
         publishService.publishAsync();
         return artwork;

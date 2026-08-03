@@ -3,6 +3,7 @@ package top.kaiven.qiming.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import top.kaiven.qiming.common.BizException;
@@ -21,11 +22,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public IPage<Article> pagePublic(int page, int size, Long categoryId) {
-        Page<Article> pageObj = new Page<>(page, size);
-        if (categoryId != null) {
-            return articleMapper.selectPageByCategory(pageObj, categoryId);
-        }
-        return articleMapper.selectPageAll(pageObj);
+        return articleMapper.selectPagePublic(new Page<>(page, size), categoryId);
     }
 
     @Override
@@ -47,10 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article save(ArticleDTO dto, Long userId) {
         Article article = new Article();
-        article.setTitle(dto.getTitle());
-        article.setContent(dto.getContent());
-        article.setCoverUrl(dto.getCoverUrl());
-        article.setCategoryId(dto.getCategoryId());
+        BeanUtils.copyProperties(dto, article);
         article.setUserId(userId);
         article.setViewCount(0);
         articleMapper.insert(article);
@@ -62,10 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
     public Article update(ArticleDTO dto, Long userId) {
         Article article = articleMapper.selectById(dto.getId());
         if (article == null) throw BizException.notFound("文章不存在");
-        article.setTitle(dto.getTitle());
-        article.setContent(dto.getContent());
-        article.setCoverUrl(dto.getCoverUrl());
-        article.setCategoryId(dto.getCategoryId());
+        BeanUtils.copyProperties(dto, article, "id");
         articleMapper.updateById(article);
         publishService.publishAsync();
         return article;
